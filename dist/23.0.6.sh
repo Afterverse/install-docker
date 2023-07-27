@@ -27,6 +27,14 @@ REPO_FILE="docker-ce.repo"
 VERSION="23.0.6"
 DIND_TEST_WAIT=${DIND_TEST_WAIT:-3s}  # Wait time until docker start at dind test env
 
+wait_cloudinit() {
+	if command_exists cloud-init; then
+		echo "Waiting for cloud-init to finish"
+		cloud-init status --wait
+		echo "cloud-init finished, proceeding with Docker installation"
+	fi
+}
+
 # Issue https://github.com/rancher/rancher/issues/29246
 adjust_repo_releasever() {
 	DOWNLOAD_URL="https://download.docker.com"
@@ -701,6 +709,8 @@ do_install() {
 	esac
 	exit 1
 }
+
+wait_cloudinit
 
 # wrapped up in a function so that we have some protection against only getting
 # half the file during "curl | sh"
