@@ -30,7 +30,7 @@ DIND_TEST_WAIT=${DIND_TEST_WAIT:-3s}  # Wait time until docker start at dind tes
 wait_cloudinit() {
 	if command_exists cloud-init; then
 		echo "Waiting for cloud-init to finish"
-		cloud-init status --wait
+		! cloud-init status --wait
 		echo "cloud-init finished, proceeding with Docker installation"
 	fi
 }
